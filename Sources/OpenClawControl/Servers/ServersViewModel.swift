@@ -42,9 +42,11 @@ final class ServersViewModel: ObservableObject {
     }
 
     func startAuth(server: ServerEndpoint, alias: String) {
-        guard !alias.trimmingCharacters(in: .whitespaces).isEmpty else { return }
-        let command = "ssh \(server.username)@\(server.host) -p \(server.port) 'openclaw models auth login --provider openai-codex'"
-        var s = ServerAuthSession(serverId: server.id, accountAlias: alias, challenge: command, state: .awaitingResponse)
+        let cleanAlias = alias.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !cleanAlias.isEmpty else { return }
+
+        let command = buildStartAuthCommand(for: server)
+        var s = ServerAuthSession(serverId: server.id, accountAlias: cleanAlias, challenge: command, state: .awaitingResponse)
         s.updatedAt = .now
         sessions.insert(s, at: 0)
         persistSessions()
@@ -69,6 +71,21 @@ final class ServersViewModel: ObservableObject {
             errorMessage = "Не удалось сохранить профиль OpenAI"
         }
         persistSessions()
+    }
+
+    private func buildStartAuthCommand(for server: ServerEndpoint) -> String {
+        let base = "ssh -o StrictHostKeyChecking=accept-new \(server.username)@\(server.host) -p \(server.port) 'openclaw models auth login --provider openai-codex'"
+
+        guard let password = keychain.load(service: pwdService, account: server.id.uuidString), !password.isEmpty else {
+            return base
+        }
+
+        let escapedPassword = shellSingleQuoted(password)
+        return "sshpass -p \(escapedPassword) \(base)"
+    }
+
+    private func shellSingleQuoted(_ value: String) -> String {
+        "'\(value.replacingOccurrences(of: "'", with: "'\\''"))'"
     }
 
     private func persistServers() { serversStore.save(servers) }

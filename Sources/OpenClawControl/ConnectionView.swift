@@ -1,4 +1,5 @@
 import SwiftUI
+import AppKit
 
 struct ConnectionView: View {
     @StateObject private var vm = ServersViewModel()
@@ -111,18 +112,30 @@ private struct AuthSessionRow: View {
             }
 
             if !session.challenge.isEmpty {
-                Text(session.challenge)
-                    .font(.caption)
-                    .textSelection(.enabled)
-                    .padding(8)
-                    .background(Color.gray.opacity(0.08))
-                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                VStack(alignment: .leading, spacing: 6) {
+                    Text(session.challenge)
+                        .font(.caption.monospaced())
+                        .textSelection(.enabled)
+                        .padding(8)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .background(Color.gray.opacity(0.08))
+                        .clipShape(RoundedRectangle(cornerRadius: 8))
+
+                    HStack {
+                        Spacer()
+                        Button("Copy command") {
+                            NSPasteboard.general.clearContents()
+                            NSPasteboard.general.setString(session.challenge, forType: .string)
+                        }
+                        .font(.caption)
+                    }
+                }
             }
 
             if session.state == .awaitingResponse || session.state == .failed {
                 HStack {
-                    TextField("Paste OpenAI response/token", text: $response)
-                    Button("Save") { onComplete(response) }
+                    TextField("Paste redirect URL / code from OpenAI", text: $response)
+                    Button("Save profile") { onComplete(response) }
                 }
             } else if session.state == .completed {
                 Text("Saved")
