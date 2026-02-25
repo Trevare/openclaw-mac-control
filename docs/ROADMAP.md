@@ -6,7 +6,7 @@
 - [x] SwiftUI каркас экранов
 - [x] Keychain service
 - [x] Локальное хранилище профилей
-- [ ] Restore Wizard (шаги)
+- [x] Restore Wizard (шаги)
 
 ## v1.1
 - [ ] Проверка доступности OpenClaw API
