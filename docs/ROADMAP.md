@@ -9,5 +9,7 @@
 - [x] Restore Wizard (шаги)
 
 ## v1.1
-- [ ] Проверка доступности OpenClaw API
+- [x] Серверы: добавление/удаление + Keychain для root-пароля
+- [x] Auth Sessions: запуск и завершение шагов OpenAI auth
+- [ ] Проверка доступности OpenClaw API (реальный SSH/health check)
 - [ ] Импорт/экспорт зашифрованного бэкапа профилей
