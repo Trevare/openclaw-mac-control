@@ -5,15 +5,56 @@
 - безопасного хранения OpenAI-профилей,
 - быстрого восстановления нескольких OpenAI-аккаунтов.
 
-## MVP v1
-1. Экран подключения к серверу (IP, логин, пароль)
-2. Экран OpenAI-профилей (добавить/редактировать/удалить)
-3. Безопасное хранение в Keychain
-4. Мастер «восстановить все профили»
+## Что уже есть в MVP v1
+- Вкладка **Server** (IP / login / password, UI-скелет)
+- Вкладка **OpenAI**:
+  - добавление и удаление профилей,
+  - хранение метаданных локально,
+  - хранение токенов в **macOS Keychain**
+- Вкладка **Restore**:
+  - пошаговый wizard по профилям,
+  - сохранение токена в Keychain,
+  - навигация назад/вперёд/пропуск
+
+---
+
+## Быстрый запуск на Mac (минимум действий)
+
+### 1) Установить Xcode (если ещё не установлен)
+App Store → Xcode → Install
+
+### 2) Запустить приложение
+В Terminal:
+
+```bash
+cd ~
+git clone https://github.com/Trevare/openclaw-mac-control.git
+cd openclaw-mac-control
+./run-macos.sh
+```
+
+Если система спросит разрешение на запуск/доступ к Keychain — нажми **Allow**.
+
+---
+
+## Запуск через Xcode (если хочешь GUI-режим разработки)
+
+```bash
+cd ~/openclaw-mac-control
+open Package.swift
+```
+
+Дальше в Xcode:
+- выбрать схему `OpenClawControl`
+- нажать **Run**
+
+---
 
 ## Структура
-- `docs/` — ТЗ, архитектура, roadmap
-- `src/OpenClawControl/` — SwiftUI-скелет экранов
+- `Sources/OpenClawControl/` — рабочий SwiftUI MVP
+- `docs/` — PRD, архитектура, roadmap
+- `run-macos.sh` — быстрый запуск
 
-## Примечание
-Проектный каркас создан для старта разработки в Xcode на Mac.
+## Безопасность
+- Токены не пишутся в plain text-файлы.
+- Секреты сохраняются в macOS Keychain.
