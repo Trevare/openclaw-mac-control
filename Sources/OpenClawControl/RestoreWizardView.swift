@@ -45,7 +45,16 @@ struct RestoreWizardView: View {
                         .buttonStyle(.borderedProminent)
                 }
             } else {
-                ContentUnavailableView("Нет профилей", systemImage: "key.fill", description: Text("Сначала добавь профили OpenAI во вкладке OpenAI"))
+                VStack(alignment: .leading, spacing: 8) {
+                    Label("Нет профилей", systemImage: "key.fill")
+                        .font(.headline)
+                    Text("Сначала добавь профили OpenAI во вкладке OpenAI")
+                        .foregroundColor(.secondary)
+                }
+                .padding()
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(Color.gray.opacity(0.08))
+                .clipShape(RoundedRectangle(cornerRadius: 10))
             }
 
             if !vm.statusMessage.isEmpty {

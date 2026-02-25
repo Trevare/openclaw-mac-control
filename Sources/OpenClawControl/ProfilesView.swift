@@ -22,7 +22,7 @@ struct ProfilesView: View {
 
             List {
                 ForEach(vm.profiles) { profile in
-                    ProfileRow(profile: profile, hasToken: vm.hasToken(profile: profile)) {
+                    ProfileRow(profile: profile, hasToken: vm.hasToken(profile)) {
                         vm.delete(profile)
                     }
                 }
